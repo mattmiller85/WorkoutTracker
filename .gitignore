@@ -232,3 +232,5 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+WorkoutTrackerApi/bin/WorkoutTrackerCore.dll
+Solution/.vs/Solution/v14/.suo

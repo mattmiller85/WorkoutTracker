@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using WorkoutTrackerApi.Services;
 using WorkoutTrackerCore;
@@ -13,7 +14,7 @@ namespace WorkoutTrackerApiTests
 		{
 			var workout = new Workout
 			{
-				Id = string.Empty,
+				Id = ObjectId.Empty,
 				Date = DateTime.Now,
 				User = "test",
 				Activities = new List<IActivity>
@@ -33,9 +34,17 @@ namespace WorkoutTrackerApiTests
 				}
 			};
 
-			var insertedWorkout = new MongoWorkoutDataService().AddUpdateWorkout(workout);
+			var insertedWorkout = new MongoWorkoutDataService().AddWorkout(workout);
 
-			Assert.NotEqual(string.Empty, insertedWorkout.Id);
+			Assert.NotEqual(ObjectId.Empty, insertedWorkout.Id);
+		}
+
+		[Fact]
+		public void ShouldGetLatestWorkoutsFromData()
+		{
+			var workouts = new MongoWorkoutDataService().GetLatest(5);
+
+			Assert.NotEmpty(workouts);
 		}
 	}
 }
