@@ -1,11 +1,11 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Security.Authentication;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using WorkoutTrackerCore;
-using MongoDB.Bson.Serialization;
 
 namespace WorkoutTrackerApi.Services
 {
@@ -20,30 +20,33 @@ namespace WorkoutTrackerApi.Services
 				Server =
 					new MongoServerAddress(ConfigurationManager.AppSettings["MongoServer"],
 						int.Parse(ConfigurationManager.AppSettings["MongoPort"])),
-				//UseSsl = true,
-				//SslSettings = new SslSettings {EnabledSslProtocols = SslProtocols.Tls12}
+				UseSsl = true,
+				SslSettings = new SslSettings {EnabledSslProtocols = SslProtocols.Tls12}
 			};
 
-			//var identity = new MongoInternalIdentity("workouttracker", ConfigurationManager.AppSettings["MongoUser"]);
-			//var evidence = new PasswordEvidence(ConfigurationManager.AppSettings["MongoPassword"]);
+			var identity = new MongoInternalIdentity("workouttracker", ConfigurationManager.AppSettings["MongoUser"]);
+			var evidence = new PasswordEvidence(ConfigurationManager.AppSettings["MongoPassword"]);
 
-			//settings.Credentials = new List<MongoCredential>
-			//{
-			//	new MongoCredential("SCRAM-SHA-1", identity, evidence)
-			//};
+			settings.Credentials = new List<MongoCredential>
+			{
+				new MongoCredential("SCRAM-SHA-1", identity, evidence)
+			};
 
 			_mongoClient = new MongoClient(settings);
-			
+			WorkoutCollection = _mongoClient.GetDatabase("workouttracker").GetCollection<Workout>("workouts");
+
+			if (BsonClassMap.IsClassMapRegistered(typeof(Workout)))
+				return;
 			BsonClassMap.RegisterClassMap<Workout>();
 			BsonClassMap.RegisterClassMap<Activity>();
 			BsonClassMap.RegisterClassMap<Set>();
 		}
 
+		private IMongoCollection<Workout> WorkoutCollection;
+
 		public List<Workout> GetLatest(int count)
-		{
-			var db = GetMongoDatabase();
-			var collection = db.GetCollection<Workout>("workouts");
-			var workouts = collection.Find(w => true)
+		{			
+			var workouts = WorkoutCollection.Find(w => true)
 				.SortByDescending(w => w.Date)
 				.Limit(count);
 			return workouts.ToList();
@@ -51,28 +54,25 @@ namespace WorkoutTrackerApi.Services
 
 		public Workout AddWorkout(Workout workout)
 		{
-			var db = GetMongoDatabase();
-			var collection = db.GetCollection<Workout>("workouts");
 			workout.Id = ObjectId.GenerateNewId();
-			collection.InsertOne(workout);			
+			WorkoutCollection.InsertOne(workout);	
 			return workout;
 		}
 
 		public void RemoveWorkout(ObjectId workoutId)
 		{
-			var db = GetMongoDatabase();
-			var collection = db.GetCollection<Workout>("workouts");
-			collection.DeleteOne(w => w.Id == workoutId);
+			WorkoutCollection.DeleteOne(w => w.Id == workoutId);
 		}
 
-		private IMongoDatabase GetMongoDatabase()
+		public void RemoveAll(Func<Workout, bool> filter)
 		{
-			return _mongoClient.GetDatabase("workouttracker");
+			WorkoutCollection.DeleteMany(w => w.User.Contains("_test"));
 		}
 
 		public Workout UpdateWorkout(Workout workout)
 		{
-			throw new NotImplementedException();
+			WorkoutCollection.ReplaceOne(w => w.Id == workout.Id, workout, new UpdateOptions { IsUpsert = true });
+			return workout;
 		}
 	}
 }
