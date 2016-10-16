@@ -35,11 +35,12 @@ namespace WorkoutTrackerApi.Services
 			_mongoClient = new MongoClient(settings);
 			WorkoutCollection = _mongoClient.GetDatabase("workouttracker").GetCollection<Workout>("workouts");
 
-			if (BsonClassMap.IsClassMapRegistered(typeof(Workout)))
-				return;
-			BsonClassMap.RegisterClassMap<Workout>();
-			BsonClassMap.RegisterClassMap<Activity>();
-			BsonClassMap.RegisterClassMap<Set>();
+			if (!BsonClassMap.IsClassMapRegistered(typeof(Workout)))				
+				BsonClassMap.RegisterClassMap<Workout>();
+			if (!BsonClassMap.IsClassMapRegistered(typeof(Activity)))
+				BsonClassMap.RegisterClassMap<Activity>();
+			if (!BsonClassMap.IsClassMapRegistered(typeof(Set)))
+				BsonClassMap.RegisterClassMap<Set>();
 		}
 
 		private IMongoCollection<Workout> WorkoutCollection;

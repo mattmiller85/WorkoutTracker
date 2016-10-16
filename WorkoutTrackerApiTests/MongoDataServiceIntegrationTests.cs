@@ -102,7 +102,7 @@ namespace WorkoutTrackerApiTests
 	{
 		public void Dispose()
 		{
-			new MongoWorkoutDataService().RemoveAll(w => w.User.StartsWith("_test"));
+			//new MongoWorkoutDataService().RemoveAll(w => w.User.StartsWith("_test"));
 		}
 	}
 }
