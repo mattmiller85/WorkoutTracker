@@ -18,19 +18,18 @@
 	<script src="Scripts/angular-ui/ui-bootstrap.js"></script>
 	<script src="workouttracker.js"></script>
 </head>
-<body ng-controller="workoutController">
+<body ng-controller="mainController">
 	<!-- HEADER AND NAVBAR -->
 	<header>
 		<nav class="navbar navbar-default">
 			<div class="container">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="/">Angular Routing Example</a>
+					<a class="navbar-brand" href="/">Workout Tracker</a>
 				</div>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-					<li><a href="#about"><i class="fa fa-shield"></i> About</a></li>
-					<li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
+					<li><a href="#/"><i class="fa fa-home"></i> Home</a></li>
+					<li><a href="#addworkout"><i class="fa fa-add"></i> Add Workout</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -38,15 +37,7 @@
 
 	<!-- MAIN CONTENT AND INJECTED VIEWS -->
 	<div id="main">
-		<div ng-repeat="workout in workouts">
-			workout button here
-		</div>
-		<div ng-show="workouts.length === 0">
-			{{ noWorkoutsMessage }}
-		</div>
-		<!-- angular templating -->
-		<!-- this is where content will be injected -->
-
+		<div ng-view></div>
 	</div>
 
 </body>
