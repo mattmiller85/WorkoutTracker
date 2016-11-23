@@ -89,8 +89,8 @@ workoutTrackerApp.controller('editWorkoutController', function ($scope, $routePa
 		$scope.loadingWorkout = false;
 		response.data.Date = new Date(response.data.Date);
 		$scope.workout = response.data;
-		$scope.noActivities = $scope.workout.Activities.length === 0;
 		__currentWorkout = $scope.workout;
+		$scope.noActivities = $scope.workout.Activities.length === 0;		
 		if($scope.noActivities){
 			$scope.workout.Activities.push({ "NameNew": "New Activity", "Name": "" });
 		}
@@ -108,6 +108,23 @@ workoutTrackerApp.controller('editWorkoutController', function ($scope, $routePa
 		$http({
 			method: 'PUT',
 			url: apiPrefix + 'workouts/update',
+			headers: {
+				'Content-Type': 'application/json',
+				/*or whatever type is relevant */
+				'Accept': 'application/json' /* ditto */
+			},
+			data: __currentWorkout
+		}).then(function successCallback(response) {
+			$location.path("/");
+		}, function errorCallback(response) {
+			$scope.hasError = true;
+			$scope.errorMessage = response.statusText === "" ? "Error saving workout." : response.statusText;
+		});
+	};
+	$scope.deleteWorkout = function(){
+		$http({
+			method: 'DELETE',
+			url: apiPrefix + 'workouts/delete/' + __currentWorkout.Id,
 			headers: {
 				'Content-Type': 'application/json',
 				/*or whatever type is relevant */

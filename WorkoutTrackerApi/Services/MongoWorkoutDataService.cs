@@ -21,17 +21,17 @@ namespace WorkoutTrackerApi.Services
 				Server =
 					new MongoServerAddress(ConfigurationManager.AppSettings["MongoServer"],
 						int.Parse(ConfigurationManager.AppSettings["MongoPort"])),
-				//UseSsl = true,
-				//SslSettings = new SslSettings {EnabledSslProtocols = SslProtocols.Tls12}
+				UseSsl = true,
+				SslSettings = new SslSettings { EnabledSslProtocols = SslProtocols.Tls12 }
 			};
 
-			//var identity = new MongoInternalIdentity("workouttracker", ConfigurationManager.AppSettings["MongoUser"]);
-			//var evidence = new PasswordEvidence(ConfigurationManager.AppSettings["MongoPassword"]);
+			var identity = new MongoInternalIdentity("workouttracker", ConfigurationManager.AppSettings["MongoUser"]);
+			var evidence = new PasswordEvidence(ConfigurationManager.AppSettings["MongoPassword"]);
 
-			//settings.Credentials = new List<MongoCredential>
-			//{
-			//	new MongoCredential("SCRAM-SHA-1", identity, evidence)
-			//};
+			settings.Credentials = new List<MongoCredential>
+			{
+				new MongoCredential("SCRAM-SHA-1", identity, evidence)
+			};
 
 			_mongoClient = new MongoClient(settings);
 			WorkoutCollection = _mongoClient.GetDatabase("workouttracker").GetCollection<Workout>("workouts");
