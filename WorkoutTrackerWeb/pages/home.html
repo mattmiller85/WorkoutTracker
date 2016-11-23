@@ -1,7 +1,12 @@
-﻿<div ng-repeat="workout in workouts">
-	workout button here
+﻿<div class="list-group">
+  <a ng-repeat="workout in workouts" ng-href="#editworkout/{{workout.Id}}" class="list-group-item">
+    {{workout.Date}} - {{workout.Description}}
+  </a>
 </div>
-<div ng-show="workouts.length === 0">
+<div ng-show="hasError === true">
+	<p>{{ errorMessage }}</p>
+</div>
+<div ng-show="noWorkouts === true">
 	<p>{{ noWorkoutsMessage }}</p>
 	<a class="btn btn-primary" href="#addworkout" role="button">New Workout</a>
 </div>
