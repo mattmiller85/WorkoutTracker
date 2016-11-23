@@ -1,7 +1,10 @@
 ﻿var workoutTrackerApp = angular.module('workoutTrackerApp', ['ui.bootstrap', 'ngRoute']);
-var apiPrefix = "http://localhost:63072//api/";
+var apiPrefix = "https://microsoft-apiapp9eeeaa56ccb744349b7428e10e48585a.azurewebsites.net/api/";
 
-workoutTrackerApp.config(function ($routeProvider) {
+workoutTrackerApp.config(function ($routeProvider, $httpProvider) {
+	$httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+	
 	$routeProvider
 
 	// route for the main page

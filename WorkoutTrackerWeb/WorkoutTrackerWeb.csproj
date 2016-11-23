@@ -67,8 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="pages\editactivity.html" />
+    <Content Include="pages\editworkout.html" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <None Include="Properties\PublishProfiles\mattmillertime.pubxml" />
+    <None Include="Properties\PublishProfiles\WorkoutTrackerWeb.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
