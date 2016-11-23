@@ -1,0 +1,26 @@
+﻿<form name="editWorkoutForm">
+    <h3>Edit Workout</h3>
+    <div class="form-group">
+        <label class="control-label">Date</label>
+        <input type="date" class="form-control" name="Date" ng-model="workout.Date" required placeholder="Date" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Description</label>
+        <input type="text" class="form-control" name="Description" ng-model="workout.Description" required placeholder="Description" />
+    </div>
+    <h4>Activities</h4>
+    <div ng-show="noActivities">
+        No activities to show
+    </div>
+    <div class="list-group">
+        <button ng-repeat="activity in workout.Activities" href="#" ng-click="editActivity(activity)" class="list-group-item">
+            <span ng-show="activity.Name != null && activity.Name !== ''">{{activity.Name}}</span>
+            <span ng-show="activity.NameNew != null && activity.NameNew !== ''">{{activity.NameNew}}</span>
+        </button>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary btn-sm" ng-click="addActivity()">Add Activity</button>
+    </div>
+    <button class="btn btn-primary" ng-click="saveWorkout()">Save {{workout.Description}}</button>
+    <a class="btn btn-secondary" href="#/" role="button">Workout List</a>
+</form>

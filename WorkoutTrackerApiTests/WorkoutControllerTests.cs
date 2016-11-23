@@ -37,13 +37,26 @@ namespace WorkoutTrackerApiTests
 		public void ShouldTellServiceToRemoveWorkoutWhen_RemoveWorkout()
 		{
 			var mockDataService = new Mock<IWorkoutDataService>();
-			var id = new ObjectId();
+			var id = ObjectId.GenerateNewId().ToString();
 			mockDataService.Setup(s => s.RemoveWorkout(id));
 			var controller = new WorkoutController(mockDataService.Object);
 
-			controller.RemoveWorkout(id);
+			controller.RemoveWorkout(id.ToString());
 
-			mockDataService.Verify(s => s.RemoveWorkout(id), Times.Once());
+			mockDataService.Verify(s => s.RemoveWorkout(It.IsAny<string>()), Times.Once());
+		}
+
+		[Fact]
+		public void ShouldTellServiceToGetWorkoutWhen_GetWorkout()
+		{
+			var mockDataService = new Mock<IWorkoutDataService>();
+			var id = ObjectId.GenerateNewId().ToString();
+			mockDataService.Setup(s => s.RemoveWorkout(id));
+			var controller = new WorkoutController(mockDataService.Object);
+
+			controller.GetWorkout(id.ToString());
+
+			mockDataService.Verify(s => s.GetWorkout(It.IsAny<string>()), Times.Once());
 		}
 
 		[Fact]
@@ -52,7 +65,7 @@ namespace WorkoutTrackerApiTests
 			var mockDataService = new Mock<IWorkoutDataService>();
 			var workout = new Workout
 			{
-				Id = ObjectId.GenerateNewId()
+				Id = ObjectId.GenerateNewId().ToString()
 			};
 			mockDataService.Setup(s => s.UpdateWorkout(workout));
 			var controller = new WorkoutController(mockDataService.Object);

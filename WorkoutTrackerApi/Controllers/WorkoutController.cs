@@ -1,10 +1,12 @@
 using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WorkoutTrackerCore;
 
 namespace WorkoutTrackerApi.Controllers
 {
+	[EnableCors(origins: "*", headers: "*", methods: "*")]
 	public class WorkoutController : ApiController
 	{
 		private readonly IWorkoutDataService _dataService;
@@ -20,6 +22,13 @@ namespace WorkoutTrackerApi.Controllers
 			return _dataService.GetLatest(count);
 		}
 
+		[HttpGet]
+		[Route("api/workout/{id}")]
+		public Workout GetWorkout(string id)
+		{
+			return _dataService.GetWorkout(id);
+		}
+
 		[HttpPost]
 		[Route("api/workouts/new")]
 		public Workout AddWorkout(Workout workout)
@@ -28,10 +37,10 @@ namespace WorkoutTrackerApi.Controllers
 		}
 
 		[HttpDelete]
-		[Route("api/workouts/delete")]
-		public void RemoveWorkout(ObjectId workoutId)
+		[Route("api/workouts/delete/{id}")]
+		public void RemoveWorkout(string id)
 		{
-			_dataService.RemoveWorkout(workoutId);
+			_dataService.RemoveWorkout(id);
 		}
 
 		[HttpPut]

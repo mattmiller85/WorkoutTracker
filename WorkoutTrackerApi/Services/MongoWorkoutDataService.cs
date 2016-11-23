@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -34,13 +35,14 @@ namespace WorkoutTrackerApi.Services
 
 			_mongoClient = new MongoClient(settings);
 			WorkoutCollection = _mongoClient.GetDatabase("workouttracker").GetCollection<Workout>("workouts");
-
-			if (!BsonClassMap.IsClassMapRegistered(typeof(Workout)))				
-				BsonClassMap.RegisterClassMap<Workout>();
-			if (!BsonClassMap.IsClassMapRegistered(typeof(Activity)))
-				BsonClassMap.RegisterClassMap<Activity>();
-			if (!BsonClassMap.IsClassMapRegistered(typeof(Set)))
-				BsonClassMap.RegisterClassMap<Set>();
+			if (BsonClassMap.IsClassMapRegistered(typeof(Workout)))
+				return;
+			BsonClassMap.RegisterClassMap<Workout>(cm =>
+			{
+				cm.AutoMap();
+				cm.SetIdMember(cm.GetMemberMap(x => x.Id)
+				  .SetIdGenerator(StringObjectIdGenerator.Instance));
+			});
 		}
 
 		private IMongoCollection<Workout> WorkoutCollection;
@@ -53,14 +55,19 @@ namespace WorkoutTrackerApi.Services
 			return workouts.ToList();
 		}
 
+		public Workout GetWorkout(string workoutID)
+		{
+			return WorkoutCollection.Find(w => w.Id == workoutID).FirstOrDefault();
+		}
+
 		public Workout AddWorkout(Workout workout)
 		{
-			workout.Id = ObjectId.GenerateNewId();
+			workout.Id = ObjectId.GenerateNewId().ToString();
 			WorkoutCollection.InsertOne(workout);	
 			return workout;
 		}
 
-		public void RemoveWorkout(ObjectId workoutId)
+		public void RemoveWorkout(string workoutId)
 		{
 			WorkoutCollection.DeleteOne(w => w.Id == workoutId);
 		}

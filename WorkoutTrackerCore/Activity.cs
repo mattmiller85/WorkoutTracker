@@ -5,6 +5,10 @@ namespace WorkoutTrackerCore
 {
     public class Activity : IActivity
     {
+		public Activity()
+		{
+			Sets = new List<Set>();
+		}
         public string Name { get; set; }
         public TimeSpan? Duration { get; set; }
         public decimal? DistanceMiles { get; set; }

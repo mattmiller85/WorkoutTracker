@@ -15,10 +15,10 @@ namespace WorkoutTrackerApiTests
 		{
 			var workout = new Workout
 			{
-				Id = ObjectId.Empty,
+				Id = ObjectId.Empty.ToString(),
 				Date = DateTime.Now,
 				User = "_test",
-				Activities = new List<IActivity>
+				Activities = new List<Activity>
 				{
 					new Activity
 					{
@@ -37,7 +37,7 @@ namespace WorkoutTrackerApiTests
 
 			var insertedWorkout = new MongoWorkoutDataService().AddWorkout(workout);
 
-			Assert.NotEqual(ObjectId.Empty, insertedWorkout.Id);
+			Assert.NotEqual(ObjectId.Empty.ToString(), insertedWorkout.Id);
 		}
 
 		[Fact]
@@ -45,10 +45,10 @@ namespace WorkoutTrackerApiTests
 		{
 			var workout = new Workout
 			{
-				Id = new ObjectId("57f8fdc7d873bc085058ce93"),
+				Id = "57f8fdc7d873bc085058ce93",
 				Date = DateTime.Now,
 				User = "_test updated " + new Random().Next().ToString(),
-				Activities = new List<IActivity>
+				Activities = new List<Activity>
 				{
 					new Activity
 					{
@@ -95,6 +95,17 @@ namespace WorkoutTrackerApiTests
 			var workouts = service.GetLatest(5);
 
 			Assert.Empty(workouts.Where(w => w.Id == workout.Id));
+		}
+
+		[Fact]
+		public void ShouldGetWorkoutFromDocumentDatabase()
+		{
+			var service = new MongoWorkoutDataService();
+			var workout = service.AddWorkout(new Workout { User = "_test" });
+
+			var retreivedWorkout = service.GetWorkout(workout.Id);
+
+			Assert.NotNull(retreivedWorkout);
 		}
 	}
 

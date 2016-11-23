@@ -8,6 +8,7 @@ namespace WorkoutTrackerCore
 		List<Workout> GetLatest(int count);
 		Workout AddWorkout(Workout workout);
 		Workout UpdateWorkout(Workout workout);
-		void RemoveWorkout(ObjectId workoutId);
+		void RemoveWorkout(string workoutId);
+		Workout GetWorkout(string workoutId);
 	}
 }

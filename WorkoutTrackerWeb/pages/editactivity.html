@@ -1,0 +1,19 @@
+﻿<form name="EditActivityForm">
+    <h3>Edit Activity</h3>
+    <div class="form-group">
+        <label class="control-label">Name</label>
+        <input type="text" class="form-control" name="Name" ng-model="activity.Name" required placeholder="Activity Name" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Sets</label>
+        <ul class="list-group">
+            <li ng-repeat="set in activity.Sets" class="list-group-item">
+                <input class="col-xs-3" type="number" ng-model="set.Reps" required placeholder="Reps" /> x <input class="col-xs-3" type="number" ng-model="set.Weight" required placeholder="Weight" />
+                <button ng-show="set.showRemove" class="btn btn-danger btn-sm" ng-click="removeSet(set)">Remove</button>
+                <button ng-show="set.showAdd" class="btn btn-primary btn-sm" ng-click="addSet(set)">Add Set</button>                
+            </li>
+        </ul>
+    </div>
+    <button class="btn btn-primary" ng-click="saveWorkout()">Save {{activity.Name}}</button>
+    <a class="btn btn-secondary" href="#/editworkout/{{workoutID}}" role="button">Cancel</a>
+</form>
