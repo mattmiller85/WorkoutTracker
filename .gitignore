@@ -234,3 +234,5 @@ _Pvt_Extensions
 .fake/
 WorkoutTrackerApi/bin/WorkoutTrackerCore.dll
 Solution/.vs/Solution/v14/.suo
+*.suo
+Solution/.vs/Solution/v14/.suo
