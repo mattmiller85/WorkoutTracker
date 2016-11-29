@@ -6,7 +6,7 @@
     </div>
     <div class="form-group">
         <label>
-            <input type="radio" name="workouttype" ng-model="isWeightTraining" ng-value="true">
+            <input type="radio" name="workouttype" ng-model="isWeightTraining" ng-change="addEmptySetIfRequired" ng-value="true">
             Weights
         </label>
         <label>
@@ -26,7 +26,8 @@
         <label class="control-label">Sets</label>
         <ul class="list-group">
             <li ng-repeat="set in activity.Sets" class="list-group-item">
-                <input class="col-xs-3" style="width:40%" type="range" min="1" max="50" ng-model="set.Reps" required placeholder="Reps" /><output>{{set.Reps}}</output> x <input class="col-xs-3" type="number" ng-model="set.Weight" required placeholder="Weight" />
+                <input type="range" min="1" max="50" ng-model="set.Reps" required placeholder="Reps" /><output>{{set.Reps}}</output>
+                <input type="number" ng-model="set.Weight" required placeholder="Weight" />
                 <button ng-show="set.showRemove" class="btn btn-danger btn-sm" ng-click="removeSet(set)">Remove</button>
                 <button ng-show="set.showAdd" class="btn btn-primary btn-sm" ng-click="addSet(set)">Add Set</button>                
             </li>

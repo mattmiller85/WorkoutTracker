@@ -1,6 +1,6 @@
 ﻿<div class="list-group">
   <a ng-repeat="workout in workouts" ng-href="#editworkout/{{workout.Id}}" class="list-group-item">
-    {{workout.Date}} - {{workout.Description}}
+    {{workout.Date | date:'shortDate'}} - {{workout.Description}}
   </a>
 </div>
 <div ng-show="hasError === true">

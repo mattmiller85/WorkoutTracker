@@ -80,6 +80,8 @@ workoutTrackerApp.controller('addWorkoutController', function ($scope, $location
 		});
 	};
 });
+var __currentWorkout;
+var __currentActivity;
 
 workoutTrackerApp.controller('editWorkoutController', function ($scope, $routeParams, $http, $location) {
 	var self = this;
@@ -151,6 +153,10 @@ workoutTrackerApp.controller('editWorkoutController', function ($scope, $routePa
 
 workoutTrackerApp.controller('editActivityController', function ($scope, $routeParams, $http, $location) {
 	var self = this;
+	if(__currentWorkout == null || __currentActivity == null){
+		$location.path("/");
+		return;
+	}		
 	$scope.isWeightTraining = true;
 	if(__currentActivity.Sets == null)
 		__currentActivity.Sets = [];
@@ -159,7 +165,7 @@ workoutTrackerApp.controller('editActivityController', function ($scope, $routeP
 	}else if(__currentActivity.DistanceMiles > 0){	
 		$scope.isWeightTraining = false;
 	}
-	if(__currentActivity.Sets.length === 0)
+	if($scope.isWeightTraining === true && __currentActivity.Sets.length === 0)
 		__currentActivity.Sets.push({ "Reps": 10, "Weight": "", "showRemove": false });
 	$scope.activity = __currentActivity;
 	$scope.workoutID = __currentWorkout.Id;
@@ -175,8 +181,24 @@ workoutTrackerApp.controller('editActivityController', function ($scope, $routeP
 		if(set.showRemove == undefined)
 			set.showRemove = true;
 	}, this);
-	$scope.activity.Sets[$scope.activity.Sets.length - 1].showAdd = true;
+	if($scope.isWeightTraining)
+		$scope.activity.Sets[$scope.activity.Sets.length - 1].showAdd = true;
+	$scope.$watch('isWeightTraining', function(value) {
+		if(!value || $scope.activity.Sets.length > 0)
+			return;
+		__currentActivity.Sets.push({ "Reps": 10, "Weight": "", "showRemove": false });
+	});
+	$scope.addEmptySetIfRequired = function(test){
+		
+	};
 	$scope.saveWorkout = function(){
+		if($scope.isWeightTraining)		{
+			__currentActivity.DistanceMiles = null;
+			__currentActivity.Duration = null;
+		}
+		else{
+			__currentActivity.Sets.splice(0);
+		}
 		$http({
 			method: 'PUT',
 			url: apiPrefix + 'workouts/update',
