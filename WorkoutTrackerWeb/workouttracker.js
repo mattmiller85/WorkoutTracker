@@ -1,5 +1,5 @@
 ﻿var workoutTrackerApp = angular.module('workoutTrackerApp', ['ui.bootstrap', 'ngRoute']);
-var apiPrefix = "https://microsoft-apiapp9eeeaa56ccb744349b7428e10e48585a.azurewebsites.net/api/";
+var apiPrefix = "https://workouttrackerapi.azurewebsites.net/api/";
 
 workoutTrackerApp.config(function ($routeProvider, $httpProvider) {
 	$httpProvider.defaults.useXDomain = true;
@@ -151,10 +151,16 @@ workoutTrackerApp.controller('editWorkoutController', function ($scope, $routePa
 
 workoutTrackerApp.controller('editActivityController', function ($scope, $routeParams, $http, $location) {
 	var self = this;
+	$scope.isWeightTraining = true;
 	if(__currentActivity.Sets == null)
 		__currentActivity.Sets = [];
+	if(__currentActivity.Sets.length > 0){
+		$scope.isWeightTraining = true;
+	}else if(__currentActivity.DistanceMiles > 0){	
+		$scope.isWeightTraining = false;
+	}
 	if(__currentActivity.Sets.length === 0)
-		__currentActivity.Sets.push({ "Reps": 10, "Weight": "", "showRemove": false });
+		__currentActivity.Sets.push({ "Reps": "", "Weight": "", "showRemove": false });
 	$scope.activity = __currentActivity;
 	$scope.workoutID = __currentWorkout.Id;
 	$scope.addSet = function(lastSet){

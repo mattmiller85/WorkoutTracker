@@ -152,6 +152,8 @@
     <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
     <Content Include="apiapp.json" />
     <None Include="Properties\PublishProfiles\WorkoutTracker%28WorkoutTracker%29.pubxml" />
+    <None Include="Properties\PublishProfiles\WorkoutTrackerApi - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\WorkoutTrackerApi - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WorkoutTrackerApi%28WorkoutTracker%29.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

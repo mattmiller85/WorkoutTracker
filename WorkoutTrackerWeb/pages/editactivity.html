@@ -5,6 +5,24 @@
         <input type="text" class="form-control" name="Name" ng-model="activity.Name" required placeholder="Activity Name" />
     </div>
     <div class="form-group">
+        <label>
+            <input type="radio" name="workouttype" ng-model="isWeightTraining" ng-value="true">
+            Weights
+        </label>
+        <label>
+            <input type="radio" name="workouttype" ng-model="isWeightTraining" ng-value="false">
+            Cardio
+        </label>
+    </div>
+    <div class="form-group" ng-show="!isWeightTraining">
+        <label class="control-label">Duration</label>
+        <input type="text" class="form-control" name="Duration" ng-model="activity.Duration" required placeholder="Activity Duration" />
+    </div>
+    <div class="form-group" ng-show="!isWeightTraining">
+        <label class="control-label">Distance</label>
+        <input type="text" class="form-control" name="Distance" ng-model="activity.DistanceMiles" required placeholder="Activity Distance (mi)" />
+    </div>
+    <div class="form-group" ng-show="isWeightTraining">
         <label class="control-label">Sets</label>
         <ul class="list-group">
             <li ng-repeat="set in activity.Sets" class="list-group-item">

@@ -6,7 +6,6 @@ using WorkoutTrackerCore;
 
 namespace WorkoutTrackerApi.Controllers
 {
-	[EnableCors(origins: "*", headers: "*", methods: "*")]
 	public class WorkoutController : ApiController
 	{
 		private readonly IWorkoutDataService _dataService;
