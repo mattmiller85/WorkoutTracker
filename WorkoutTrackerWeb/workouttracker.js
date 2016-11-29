@@ -160,12 +160,12 @@ workoutTrackerApp.controller('editActivityController', function ($scope, $routeP
 		$scope.isWeightTraining = false;
 	}
 	if(__currentActivity.Sets.length === 0)
-		__currentActivity.Sets.push({ "Reps": "", "Weight": "", "showRemove": false });
+		__currentActivity.Sets.push({ "Reps": 10, "Weight": "", "showRemove": false });
 	$scope.activity = __currentActivity;
 	$scope.workoutID = __currentWorkout.Id;
 	$scope.addSet = function(lastSet){
 		lastSet.showAdd = false;
-		$scope.activity.Sets.push({ "Reps": "", "Weight": "", "showRemove": true, "showAdd": true });
+		$scope.activity.Sets.push({ "Reps": 10, "Weight": "", "showRemove": true, "showAdd": true });
 	};
 	$scope.removeSet = function(set){
 		$scope.activity.Sets.splice($scope.activity.Sets.indexOf(set), 1);
