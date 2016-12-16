@@ -1,6 +1,19 @@
 ﻿var workoutTrackerApp = angular.module('workoutTrackerApp', ['ui.bootstrap', 'ngRoute']);
 var apiPrefix = "https://workouttrackerapi.azurewebsites.net/api/";
 
+function addWorkout(workout, $http){
+	return $http({
+			method: 'POST',
+			url: apiPrefix + 'workouts/new',
+			headers: {
+				'Content-Type': 'application/json',
+				/*or whatever type is relevant */
+				'Accept': 'application/json' /* ditto */
+			},
+			data: workout
+		});
+}
+
 workoutTrackerApp.config(function ($routeProvider, $httpProvider) {
 	$httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
@@ -62,16 +75,7 @@ workoutTrackerApp.controller('addWorkoutController', function ($scope, $location
 		"User": "some_user_string"
 	};
 	$scope.addWorkout = function () {
-		$http({
-			method: 'POST',
-			url: apiPrefix + 'workouts/new',
-			headers: {
-				'Content-Type': 'application/json',
-				/*or whatever type is relevant */
-				'Accept': 'application/json' /* ditto */
-			},
-			data: $scope.workout
-		}).then(function successCallback(response) {
+		addWorkout(scope.workout, $http).then(function successCallback(response) {
 			$location.path("editworkout/" + response.data.Id)
 		}, function errorCallback(response) {
 			$scope.hasError = true;
@@ -143,6 +147,18 @@ workoutTrackerApp.controller('editWorkoutController', function ($scope, $routePa
 			$scope.errorMessage = response.statusText === "" ? "Error saving workout." : response.statusText;
 		});
 	};
+
+	$scope.copyWorkout = function(){
+		__currentWorkout["Date"] = new Date();
+		addWorkout(__currentWorkout, $http).then(function successCallback(response) {
+			$location.path("editworkout/" + response.data.Id)
+		}, function errorCallback(response) {
+			$scope.hasError = true;
+			$scope.errorMessage = response.statusText === "" ? "Error adding workout." : response.statusText;
+			$scope.loadingWorkouts = false;
+		});
+	};
+
 	$scope.addActivity = function(){
 		var activity = { "NameNew": "New Activity", "Name": "" };
 		$scope.workout.Activities.push(activity);
