@@ -75,7 +75,7 @@ workoutTrackerApp.controller('addWorkoutController', function ($scope, $location
 		"User": "some_user_string"
 	};
 	$scope.addWorkout = function () {
-		addWorkout(scope.workout, $http).then(function successCallback(response) {
+		addWorkout($scope.workout, $http).then(function successCallback(response) {
 			$location.path("editworkout/" + response.data.Id)
 		}, function errorCallback(response) {
 			$scope.hasError = true;
